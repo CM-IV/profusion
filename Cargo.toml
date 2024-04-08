@@ -2,8 +2,6 @@
 resolver = "2"
 members = [
     "examples/*",
-    "test_integration",
-    "test_codegen",
     "benches",
     "crates/*",
 ]

@@ -33,3 +33,5 @@ heck = "0.4.0"
 
 # Order-preserving map to work around borrowing issues
 indexmap = "2.0.2"
+
+specta = { version = "1.0.5", features = ["typescript", "export"] }
