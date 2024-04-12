@@ -1,4 +1,4 @@
-// This file was generated with `cornucopia`. Do not modify.
+// This file was generated with `profusion`. Do not modify.
 
 #[allow(clippy::all, clippy::pedantic)]
 #[allow(unused_variables)]
@@ -209,18 +209,18 @@ pub mod types {
 #[allow(dead_code)]
 pub mod queries {
     pub mod module_1 {
-        use cornucopia_async::GenericClient;
+        use profusion_async::GenericClient;
         use futures;
         use futures::{StreamExt, TryStreamExt};
         pub fn insert_book() -> InsertBookStmt {
-            InsertBookStmt(cornucopia_async::private::Stmt::new(
+            InsertBookStmt(profusion_async::private::Stmt::new(
                 "INSERT INTO Book (title)
   VALUES ($1)",
             ))
         }
-        pub struct InsertBookStmt(cornucopia_async::private::Stmt);
+        pub struct InsertBookStmt(profusion_async::private::Stmt);
         impl InsertBookStmt {
-            pub async fn bind<'a, C: GenericClient, T1: cornucopia_async::StringSql>(
+            pub async fn bind<'a, C: GenericClient, T1: profusion_async::StringSql>(
                 &'a mut self,
                 client: &'a C,
                 title: &'a T1,
@@ -232,7 +232,7 @@ pub mod queries {
     }
     pub mod module_2 {
         #[derive(Debug)]
-        pub struct AuthorNameStartingWithParams<T1: cornucopia_async::StringSql> {
+        pub struct AuthorNameStartingWithParams<T1: profusion_async::StringSql> {
             pub start_str: T1,
         }
         #[derive(Debug, Clone, PartialEq)]
@@ -292,7 +292,7 @@ pub mod queries {
         }
         pub struct SelectTranslationsBorrowed<'a> {
             pub title: &'a str,
-            pub translations: cornucopia_async::ArrayIterator<'a, &'a str>,
+            pub translations: profusion_async::ArrayIterator<'a, &'a str>,
         }
         impl<'a> From<SelectTranslationsBorrowed<'a>> for SelectTranslations {
             fn from(
@@ -307,13 +307,13 @@ pub mod queries {
                 }
             }
         }
-        use cornucopia_async::GenericClient;
+        use profusion_async::GenericClient;
         use futures;
         use futures::{StreamExt, TryStreamExt};
         pub struct AuthorsQuery<'a, C: GenericClient, T, const N: usize> {
             client: &'a C,
             params: [&'a (dyn postgres_types::ToSql + Sync); N],
-            stmt: &'a mut cornucopia_async::private::Stmt,
+            stmt: &'a mut profusion_async::private::Stmt,
             extractor: fn(&tokio_postgres::Row) -> AuthorsBorrowed,
             mapper: fn(AuthorsBorrowed) -> T,
         }
@@ -355,7 +355,7 @@ pub mod queries {
                 let stmt = self.stmt.prepare(self.client).await?;
                 let it = self
                     .client
-                    .query_raw(stmt, cornucopia_async::private::slice_iter(&self.params))
+                    .query_raw(stmt, profusion_async::private::slice_iter(&self.params))
                     .await?
                     .map(move |res| res.map(|row| (self.mapper)((self.extractor)(&row))))
                     .into_stream();
@@ -365,7 +365,7 @@ pub mod queries {
         pub struct StringQuery<'a, C: GenericClient, T, const N: usize> {
             client: &'a C,
             params: [&'a (dyn postgres_types::ToSql + Sync); N],
-            stmt: &'a mut cornucopia_async::private::Stmt,
+            stmt: &'a mut profusion_async::private::Stmt,
             extractor: fn(&tokio_postgres::Row) -> &str,
             mapper: fn(&str) -> T,
         }
@@ -407,7 +407,7 @@ pub mod queries {
                 let stmt = self.stmt.prepare(self.client).await?;
                 let it = self
                     .client
-                    .query_raw(stmt, cornucopia_async::private::slice_iter(&self.params))
+                    .query_raw(stmt, profusion_async::private::slice_iter(&self.params))
                     .await?
                     .map(move |res| res.map(|row| (self.mapper)((self.extractor)(&row))))
                     .into_stream();
@@ -417,7 +417,7 @@ pub mod queries {
         pub struct AuthorNameStartingWithQuery<'a, C: GenericClient, T, const N: usize> {
             client: &'a C,
             params: [&'a (dyn postgres_types::ToSql + Sync); N],
-            stmt: &'a mut cornucopia_async::private::Stmt,
+            stmt: &'a mut profusion_async::private::Stmt,
             extractor: fn(&tokio_postgres::Row) -> AuthorNameStartingWithBorrowed,
             mapper: fn(AuthorNameStartingWithBorrowed) -> T,
         }
@@ -462,7 +462,7 @@ pub mod queries {
                 let stmt = self.stmt.prepare(self.client).await?;
                 let it = self
                     .client
-                    .query_raw(stmt, cornucopia_async::private::slice_iter(&self.params))
+                    .query_raw(stmt, profusion_async::private::slice_iter(&self.params))
                     .await?
                     .map(move |res| res.map(|row| (self.mapper)((self.extractor)(&row))))
                     .into_stream();
@@ -472,7 +472,7 @@ pub mod queries {
         pub struct PublicVoiceactorQuery<'a, C: GenericClient, T, const N: usize> {
             client: &'a C,
             params: [&'a (dyn postgres_types::ToSql + Sync); N],
-            stmt: &'a mut cornucopia_async::private::Stmt,
+            stmt: &'a mut profusion_async::private::Stmt,
             extractor: fn(&tokio_postgres::Row) -> super::super::types::public::VoiceactorBorrowed,
             mapper: fn(super::super::types::public::VoiceactorBorrowed) -> T,
         }
@@ -517,7 +517,7 @@ pub mod queries {
                 let stmt = self.stmt.prepare(self.client).await?;
                 let it = self
                     .client
-                    .query_raw(stmt, cornucopia_async::private::slice_iter(&self.params))
+                    .query_raw(stmt, profusion_async::private::slice_iter(&self.params))
                     .await?
                     .map(move |res| res.map(|row| (self.mapper)((self.extractor)(&row))))
                     .into_stream();
@@ -527,7 +527,7 @@ pub mod queries {
         pub struct SelectTranslationsQuery<'a, C: GenericClient, T, const N: usize> {
             client: &'a C,
             params: [&'a (dyn postgres_types::ToSql + Sync); N],
-            stmt: &'a mut cornucopia_async::private::Stmt,
+            stmt: &'a mut profusion_async::private::Stmt,
             extractor: fn(&tokio_postgres::Row) -> SelectTranslationsBorrowed,
             mapper: fn(SelectTranslationsBorrowed) -> T,
         }
@@ -572,7 +572,7 @@ pub mod queries {
                 let stmt = self.stmt.prepare(self.client).await?;
                 let it = self
                     .client
-                    .query_raw(stmt, cornucopia_async::private::slice_iter(&self.params))
+                    .query_raw(stmt, profusion_async::private::slice_iter(&self.params))
                     .await?
                     .map(move |res| res.map(|row| (self.mapper)((self.extractor)(&row))))
                     .into_stream();
@@ -580,14 +580,14 @@ pub mod queries {
             }
         }
         pub fn authors() -> AuthorsStmt {
-            AuthorsStmt(cornucopia_async::private::Stmt::new(
+            AuthorsStmt(profusion_async::private::Stmt::new(
                 "SELECT
     *
 FROM
     Author",
             ))
         }
-        pub struct AuthorsStmt(cornucopia_async::private::Stmt);
+        pub struct AuthorsStmt(profusion_async::private::Stmt);
         impl AuthorsStmt {
             pub fn bind<'a, C: GenericClient>(
                 &'a mut self,
@@ -607,14 +607,14 @@ FROM
             }
         }
         pub fn books() -> BooksStmt {
-            BooksStmt(cornucopia_async::private::Stmt::new(
+            BooksStmt(profusion_async::private::Stmt::new(
                 "SELECT
     Title
 FROM
     Book",
             ))
         }
-        pub struct BooksStmt(cornucopia_async::private::Stmt);
+        pub struct BooksStmt(profusion_async::private::Stmt);
         impl BooksStmt {
             pub fn bind<'a, C: GenericClient>(
                 &'a mut self,
@@ -630,7 +630,7 @@ FROM
             }
         }
         pub fn author_name_by_id() -> AuthorNameByIdStmt {
-            AuthorNameByIdStmt(cornucopia_async::private::Stmt::new(
+            AuthorNameByIdStmt(profusion_async::private::Stmt::new(
                 "SELECT
     Author.Name
 FROM
@@ -639,7 +639,7 @@ WHERE
     Author.Id = $1",
             ))
         }
-        pub struct AuthorNameByIdStmt(cornucopia_async::private::Stmt);
+        pub struct AuthorNameByIdStmt(profusion_async::private::Stmt);
         impl AuthorNameByIdStmt {
             pub fn bind<'a, C: GenericClient>(
                 &'a mut self,
@@ -656,7 +656,7 @@ WHERE
             }
         }
         pub fn author_name_starting_with() -> AuthorNameStartingWithStmt {
-            AuthorNameStartingWithStmt(cornucopia_async::private::Stmt::new(
+            AuthorNameStartingWithStmt(profusion_async::private::Stmt::new(
                 "SELECT
     BookAuthor.AuthorId,
     Author.Name,
@@ -670,9 +670,9 @@ WHERE
     Author.Name LIKE CONCAT($1::text, '%')",
             ))
         }
-        pub struct AuthorNameStartingWithStmt(cornucopia_async::private::Stmt);
+        pub struct AuthorNameStartingWithStmt(profusion_async::private::Stmt);
         impl AuthorNameStartingWithStmt {
-            pub fn bind<'a, C: GenericClient, T1: cornucopia_async::StringSql>(
+            pub fn bind<'a, C: GenericClient, T1: profusion_async::StringSql>(
                 &'a mut self,
                 client: &'a C,
                 start_str: &'a T1,
@@ -691,8 +691,8 @@ WHERE
                 }
             }
         }
-        impl<'a, C: GenericClient, T1: cornucopia_async::StringSql>
-            cornucopia_async::Params<
+        impl<'a, C: GenericClient, T1: profusion_async::StringSql>
+            profusion_async::Params<
                 'a,
                 AuthorNameStartingWithParams<T1>,
                 AuthorNameStartingWithQuery<'a, C, AuthorNameStartingWith, 1>,
@@ -708,7 +708,7 @@ WHERE
             }
         }
         pub fn select_voice_actor_with_character() -> SelectVoiceActorWithCharacterStmt {
-            SelectVoiceActorWithCharacterStmt(cornucopia_async::private::Stmt::new(
+            SelectVoiceActorWithCharacterStmt(profusion_async::private::Stmt::new(
                 "SELECT
     voice_actor
 FROM
@@ -717,7 +717,7 @@ WHERE
     character = $1",
             ))
         }
-        pub struct SelectVoiceActorWithCharacterStmt(cornucopia_async::private::Stmt);
+        pub struct SelectVoiceActorWithCharacterStmt(profusion_async::private::Stmt);
         impl SelectVoiceActorWithCharacterStmt {
             pub fn bind<'a, C: GenericClient>(
                 &'a mut self,
@@ -735,7 +735,7 @@ WHERE
             }
         }
         pub fn select_translations() -> SelectTranslationsStmt {
-            SelectTranslationsStmt(cornucopia_async::private::Stmt::new(
+            SelectTranslationsStmt(profusion_async::private::Stmt::new(
                 "SELECT
     Title,
     Translations
@@ -743,7 +743,7 @@ FROM
     Book",
             ))
         }
-        pub struct SelectTranslationsStmt(cornucopia_async::private::Stmt);
+        pub struct SelectTranslationsStmt(profusion_async::private::Stmt);
         impl SelectTranslationsStmt {
             pub fn bind<'a, C: GenericClient>(
                 &'a mut self,

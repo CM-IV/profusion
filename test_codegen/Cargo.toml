@@ -7,10 +7,10 @@ edition = "2021"
 
 [dependencies]
 # Path dependencies
-cornucopia_sync = { path = "../crates/client_sync", features = [
+profusion_sync = { path = "../crates/client_sync", features = [
     "with-serde_json-1",
 ] }
-cornucopia_async = { path = "../crates/client_async", features = [
+profusion_async = { path = "../crates/client_async", features = [
     "with-serde_json-1",
 ] }
 

@@ -1,6 +1,5 @@
 use core::str;
 use std::fmt::{Display, Write};
-use specta::{export, ts, Type};
 
 use codegen_template::code;
 use indexmap::IndexMap;
@@ -38,9 +37,9 @@ impl GenCtx {
 
     pub fn client_name(&self) -> &'static str {
         if self.is_async {
-            "cornucopia_async"
+            "profusion_async"
         } else {
-            "cornucopia_sync"
+            "profusion_sync"
         }
     }
 }
@@ -353,7 +352,7 @@ fn gen_row_structs(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
             ""
         };
         code!(w =>
-            #[derive($ser_str Debug, Clone, PartialEq, Type, $copy)]
+            #[derive($ser_str Debug, Clone, PartialEq, ToSchema, $copy)]
             pub struct $name {
                 $(pub $fields_name : $fields_ty,)
             }
@@ -400,7 +399,7 @@ fn gen_row_query(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
                 "futures::Stream",
                 "",
                 ".into_stream()",
-                "cornucopia_async",
+                "profusion_async",
             )
         } else {
             (
@@ -412,7 +411,7 @@ fn gen_row_query(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
                 "Iterator",
                 ".iterator()",
                 "",
-                "cornucopia_sync",
+                "profusion_sync",
             )
         };
 
@@ -489,9 +488,9 @@ fn gen_query_fn<W: Write>(w: &mut W, module: &PreparedModule, query: &PreparedQu
     } = query;
 
     let (client_mut, fn_async, fn_await, backend, client) = if ctx.is_async {
-        ("", "async", ".await", "tokio_postgres", "cornucopia_async")
+        ("", "async", ".await", "tokio_postgres", "profusion_async")
     } else {
-        ("mut", "", "", "postgres", "cornucopia_sync")
+        ("mut", "", "", "postgres", "profusion_sync")
     };
 
     let struct_name = ident.type_ident();
@@ -656,7 +655,7 @@ fn gen_custom_type(w: &mut impl Write, schema: &str, prepared: &PreparedType, ct
         PreparedContent::Enum(variants) => {
             let variants_ident = variants.iter().map(|v| &v.rs);
             code!(w =>
-                #[derive($ser_str Debug, Clone, Copy, specta::Type, PartialEq, Eq)]
+                #[derive($ser_str Debug, Clone, Copy, ToSchema, PartialEq, Eq)]
                 #[allow(non_camel_case_types)]
                 pub enum $struct_name {
                     $($variants_ident,)
@@ -670,7 +669,7 @@ fn gen_custom_type(w: &mut impl Write, schema: &str, prepared: &PreparedType, ct
             {
                 let fields_ty = fields.iter().map(|p| p.own_struct(ctx));
                 code!(w =>
-                    #[derive($ser_str Debug,postgres_types::FromSql,$copy Clone, PartialEq, specta::Type)]
+                    #[derive($ser_str Debug,postgres_types::FromSql,$copy Clone, PartialEq, ToSchema)]
                     #[postgres(name = "$name")]
                     pub struct $struct_name {
                         $(
@@ -750,7 +749,7 @@ fn gen_type_modules<W: Write>(
 }
 
 pub(crate) fn generate(preparation: Preparation, settings: CodegenSettings) -> String {
-    let mut buff = "// This file was generated with `cornucopia`. Do not modify.\n\n".to_string();
+    let mut buff = "// This file was generated with `profusion`. Do not modify.\n\n".to_string();
     let w = &mut buff;
     // Generate database type
     gen_type_modules(
@@ -777,7 +776,7 @@ pub(crate) fn generate(preparation: Preparation, settings: CodegenSettings) -> S
                     move |w: &mut String| {
                         let ctx = GenCtx::new(depth, is_async, settings.derive_ser);
                         let import = if is_async {
-                            "use futures::{StreamExt, TryStreamExt};use futures; use cornucopia_async::GenericClient; use specta::{export, ts, Type};"
+                            "use futures::{StreamExt, TryStreamExt};use futures; use profusion_async::GenericClient; use salvo::oapi::ToSchema;"
                         } else {
                             "use postgres::{fallible_iterator::FallibleIterator,GenericClient};"
                         };

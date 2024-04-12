@@ -1,5 +1,5 @@
-<div align="center"> <img src="https://raw.githubusercontent.com/cornucopia-rs/cornucopia/main/assets/logo.svg" width=200 /> </div>
-<h1 align="center">Cornucopia</h1>
+<div align="center"> <img src="https://raw.githubusercontent.com/profusion-rs/profusion/main/assets/logo.svg" width=200 /> </div>
+<h1 align="center">profusion</h1>
 <div align="center">
  <strong>
    Generate type-checked Rust from your SQL
@@ -10,23 +10,23 @@
 
 <div align="center">
   <!-- Version -->
-  <a href="https://crates.io/crates/cornucopia_sync">
-    <img src="https://img.shields.io/crates/v/cornucopia_sync.svg?style=flat-square"
+  <a href="https://crates.io/crates/profusion_sync">
+    <img src="https://img.shields.io/crates/v/profusion_sync.svg?style=flat-square"
     alt="Crates.io version" />
   </a>
 
   <!-- Book -->
-  <a href="https://cornucopia-rs.netlify.app/book/index.html">
+  <a href="https://profusion-rs.netlify.app/book/index.html">
   <img src="https://img.shields.io/badge/book-latest-blue?logo=mdbook&style=flat-square" alt="book">
   </a>
 
   <!-- Docs -->
-  <a href="https://docs.rs/cornucopia_sync/latest/cornucopia_sync/">
-    <img alt="docs.rs" src="https://img.shields.io/docsrs/cornucopia_sync?style=flat-square">
+  <a href="https://docs.rs/profusion_sync/latest/profusion_sync/">
+    <img alt="docs.rs" src="https://img.shields.io/docsrs/profusion_sync?style=flat-square">
   </a>
 
   <!-- License -->
-  <a href="https://github.com/cornucopia-rs/cornucopia#License">
+  <a href="https://github.com/profusion-rs/profusion#License">
     <img src="https://img.shields.io/badge/License-APACHE--2.0%2FMIT-blue?style=flat-square" alt="License">
   </a>
 
@@ -38,10 +38,10 @@
 
 ---
 
-**Note:** This crate is the *synchronous* client. You can find the *asynchronous* client [here](https://crates.io/crates/cornucopia_async).
+**Note:** This crate is the *synchronous* client. You can find the *asynchronous* client [here](https://crates.io/crates/profusion_async).
 
-This is a client crate for [Cornucopia](https://crates.io/crates/cornucopia). This dependency provides
+This is a client crate for [profusion](https://crates.io/crates/profusion). This dependency provides
 1. Internals required by the generated code.
-2. Public items that you may find useful when working with Cornucopia (you can find more info about these in the [docs](https://docs.rs/cornucopia_sync/latest/cornucopia_sync/)).
+2. Public items that you may find useful when working with profusion (you can find more info about these in the [docs](https://docs.rs/profusion_sync/latest/profusion_sync/)).
 
-***You need to depend on this crate for Cornucopia's generated code to work properly.***
+***You need to depend on this crate for profusion's generated code to work properly.***

@@ -4,10 +4,10 @@ name = "basic-async"
 version = "0.1.0"
 
 [dependencies]
-# Cornucopia async client
+# profusion async client
 ## If you're trying this example as a standalone crate, 
 ## replace the path with the latest current version
-cornucopia_async = { path = "../../crates/client_async" }
+profusion_async = { path = "../../crates/client_async" }
 
 # Async
 tokio = { version = "1.24.2", features = ["full"] }

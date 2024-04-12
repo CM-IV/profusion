@@ -112,11 +112,11 @@ dependencies = [
 name = "auto-build"
 version = "0.1.0"
 dependencies = [
- "cornucopia",
- "cornucopia_async",
  "deadpool-postgres",
  "futures",
  "postgres-types",
+ "profusion",
+ "profusion_async",
  "tokio",
  "tokio-postgres",
 ]
@@ -161,10 +161,10 @@ checksum = "9ba43ea6f343b788c8764558649e08df62f86c6ef251fdaeb1ffd010a9ae50a2"
 name = "basic-async"
 version = "0.1.0"
 dependencies = [
- "cornucopia_async",
  "deadpool-postgres",
  "futures",
  "postgres-types",
+ "profusion_async",
  "tokio",
  "tokio-postgres",
 ]
@@ -173,23 +173,23 @@ dependencies = [
 name = "basic_sync"
 version = "0.1.0"
 dependencies = [
- "cornucopia_sync",
  "postgres",
  "postgres-types",
+ "profusion_sync",
 ]
 
 [[package]]
 name = "benches"
 version = "0.1.0"
 dependencies = [
- "cornucopia",
- "cornucopia_async",
- "cornucopia_sync",
  "criterion",
  "diesel",
  "futures",
  "postgres",
  "postgres-types",
+ "profusion",
+ "profusion_async",
+ "profusion_sync",
  "tokio",
  "tokio-postgres",
 ]
@@ -344,51 +344,6 @@ name = "colorchoice"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "acbf1af155f9b9ef647e42cdc158db4b64a1b61f743629225fde6f3e0be2a7c7"
-
-[[package]]
-name = "cornucopia"
-version = "0.9.0"
-dependencies = [
- "chumsky",
- "clap",
- "codegen_template",
- "heck",
- "indexmap",
- "miette",
- "postgres",
- "postgres-types",
- "specta",
- "thiserror",
-]
-
-[[package]]
-name = "cornucopia_async"
-version = "0.6.0"
-dependencies = [
- "async-trait",
- "cornucopia_client_core",
- "deadpool-postgres",
- "tokio-postgres",
-]
-
-[[package]]
-name = "cornucopia_client_core"
-version = "0.4.0"
-dependencies = [
- "fallible-iterator",
- "postgres-protocol",
- "postgres-types",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "cornucopia_sync"
-version = "0.4.0"
-dependencies = [
- "cornucopia_client_core",
- "postgres",
-]
 
 [[package]]
 name = "cpufeatures"
@@ -1154,6 +1109,51 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "134c189feb4956b20f6f547d2cf727d4c0fe06722b20a0eec87ed445a97f92da"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "profusion"
+version = "0.9.0"
+dependencies = [
+ "chumsky",
+ "clap",
+ "codegen_template",
+ "heck",
+ "indexmap",
+ "miette",
+ "postgres",
+ "postgres-types",
+ "specta",
+ "thiserror",
+]
+
+[[package]]
+name = "profusion_async"
+version = "0.6.0"
+dependencies = [
+ "async-trait",
+ "deadpool-postgres",
+ "profusion_client_core",
+ "tokio-postgres",
+]
+
+[[package]]
+name = "profusion_client_core"
+version = "0.4.0"
+dependencies = [
+ "fallible-iterator",
+ "postgres-protocol",
+ "postgres-types",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "profusion_sync"
+version = "0.4.0"
+dependencies = [
+ "postgres",
+ "profusion_client_core",
 ]
 
 [[package]]

@@ -7,9 +7,9 @@ edition = "2021"
 
 [dependencies]
 # Path dependencies
-cornucopia = { path = "../crates/cornucopia" }
-cornucopia_sync = { path = "../crates/client_sync" }
-cornucopia_async = { path = "../crates/client_async" }
+profusion = { path = "../crates/profusion" }
+profusion_sync = { path = "../crates/client_sync" }
+profusion_async = { path = "../crates/client_async" }
 
 # benchmarking
 criterion = { version = "0.5.1", features = ["html_reports"] }

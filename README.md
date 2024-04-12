@@ -1,5 +1,5 @@
 <div align="center"> <img src="https://raw.githubusercontent.com/cornucopia-rs/cornucopia/main/assets/logo.svg" width=200 /> </div>
-<h1 align="center">Cornucopia</h1>
+<h1 align="center">profusion (Fork of Cornucopia)</h1>
 <div align="center">
  <strong>
    Generate type-checked  Rust from your SQL
@@ -63,14 +63,14 @@
 
 <br />
 
-Cornucopia is a tool powered by [`rust-postgres`](https://github.com/sfackler/rust-postgres) designed to generate type-checked Rust interfaces from your PostgreSQL queries. It works by preparing your queries against an actual database and then running an extensive validation suite on them. Once the queries are prepared and validated, Rust code is generated into a module, which can be imported and used in your project. 
+profusion is a tool powered by [`rust-postgres`](https://github.com/sfackler/rust-postgres) designed to generate type-checked Rust interfaces from your PostgreSQL queries. It works by preparing your queries against an actual database and then running an extensive validation suite on them. Once the queries are prepared and validated, Rust code is generated into a module, which can be imported and used in your project. 
 
 The basic premise is thus to:
 1. Write your PostgreSQL queries.
-2. Use Cornucopia to generate Rust code.
+2. Use profusion to generate Rust code.
 3. Use the generated code in your project.
 
-Compared to other Rust database interfaces, Cornucopia's approach has the benefits of being simple to understand while also generating code that is both ergonomic and free of heavy macros or complex generics. Since Cornucopia generates plain Rust structs, you can also easily build upon the generated items.
+Compared to other Rust database interfaces, profusion's approach has the benefits of being simple to understand while also generating code that is both ergonomic and free of heavy macros or complex generics. Since profusion generates plain Rust structs, you can also easily build upon the generated items.
 
 Here are some defining features:
 * SQL-first. Your SQL is the only source of truth. No intricate ORM.
@@ -82,9 +82,9 @@ Here are some defining features:
 * Available as a library and a CLI.
 * As close to native `rust-postgres` performance as we can make it.
 
-You can learn more about using Cornucopia by reading our [book](https://cornucopia-rs.netlify.app/book/index.html), or you can get a quickstart by looking at our [examples](https://cornucopia-rs.netlify.app/book/examples.html).
+You can learn more about using profusion by reading our [book](https://cornucopia-rs.netlify.app/book/index.html), or you can get a quickstart by looking at our [examples](https://cornucopia-rs.netlify.app/book/examples.html).
 
-## A quick taste of Cornucopia
+## A quick taste of profusion
 The [book](https://cornucopia-rs.netlify.app/book/index.html) is the place to go to get more in-depth explanations, but here is the simplest of tasters to give you an idea.
 
 Let's say you have the following PostgreSQL queries
@@ -100,10 +100,10 @@ VALUES (:first_name, :last_name, :country)
 ```
 Notice the query annotations (`--! authors`, `--! insert_authors`) and the named bind parameters (`:first_name`, etc.).
 
-Then, after generating the Rust code with Cornucopia's CLI, you can import it into your project like so:
+Then, after generating the Rust code with profusion's CLI, you can import it into your project like so:
 ```rust
-mod cornucopia;
-use cornucopia::{authors, insert_author};
+mod profusion;
+use profusion::{authors, insert_author};
 ```
 
 Finally here is an example usage of these queries:
@@ -120,7 +120,7 @@ for author in all_authors {
   )
 }
 ```
-You can customize pretty much every aspect of your queries easily with Cornucopia (custom parameters and row structs, renaming, nullity control, etc.), so please head over to the [book](https://cornucopia-rs.netlify.app/book/index.html) if you're interested to learn more.
+You can customize pretty much every aspect of your queries easily with profusion (custom parameters and row structs, renaming, nullity control, etc.), so please head over to the [book](https://cornucopia-rs.netlify.app/book/index.html) if you're interested to learn more.
 
 ## MSRV
 This crate uses Rust 2021 edition, which requires at least version 1.62.1.
