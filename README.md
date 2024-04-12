@@ -1,5 +1,5 @@
 <div align="center"> <img src="https://raw.githubusercontent.com/cornucopia-rs/cornucopia/main/assets/logo.svg" width=200 /> </div>
-<h1 align="center">profusion (Fork of Cornucopia)</h1>
+<h1 align="center">Profusion (Fork of Cornucopia)</h1>
 <div align="center">
  <strong>
    Generate type-checked  Rust from your SQL
