@@ -346,7 +346,7 @@ fn gen_row_structs(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
         let fields_name = fields.iter().map(|p| &p.ident.rs);
         let fields_ty = fields.iter().map(|p| p.own_struct(ctx));
         let fields_attr = fields.iter().map(|p| {
-            if p.ident.rs.contains("created_at") {
+            if p.ident.rs.contains("created_at") || p.ident.rs.contains("updated_at") {
                 String::from("#[serde(with = \"time::serde::rfc3339\")]")
             } else {
                 String::from("")
