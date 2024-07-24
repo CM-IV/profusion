@@ -360,7 +360,7 @@ fn gen_row_structs(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
             ""
         };
         code!(w =>
-            #[derive($ser_str Debug, Clone, PartialEq, ToSchema, $copy)]
+            #[derive($ser_str Debug, Clone, PartialEq, ToSchema, ToLuaTable, FromLuaTable, $copy)]
             pub struct $name {
                 $($fields_attr
                 pub $fields_name : $fields_ty,)
@@ -665,7 +665,7 @@ fn gen_custom_type(w: &mut impl Write, schema: &str, prepared: &PreparedType, ct
         PreparedContent::Enum(variants) => {
             let variants_ident = variants.iter().map(|v| &v.rs);
             code!(w =>
-                #[derive($ser_str Debug, Clone, Copy, ToSchema, PartialEq, Eq)]
+                #[derive($ser_str Debug, Clone, Copy, ToSchema, ToLuaTable, FromLuaTable, PartialEq, Eq)]
                 #[allow(non_camel_case_types)]
                 pub enum $struct_name {
                     $($variants_ident,)
@@ -679,7 +679,7 @@ fn gen_custom_type(w: &mut impl Write, schema: &str, prepared: &PreparedType, ct
             {
                 let fields_ty = fields.iter().map(|p| p.own_struct(ctx));
                 code!(w =>
-                    #[derive($ser_str Debug,postgres_types::FromSql,$copy Clone, PartialEq, ToSchema)]
+                    #[derive($ser_str Debug,postgres_types::FromSql,$copy Clone, PartialEq, ToSchema, ToLuaTable, FromLuaTable)]
                     #[postgres(name = "$name")]
                     pub struct $struct_name {
                         $(
@@ -786,7 +786,7 @@ pub(crate) fn generate(preparation: Preparation, settings: CodegenSettings) -> S
                     move |w: &mut String| {
                         let ctx = GenCtx::new(depth, is_async, settings.derive_ser);
                         let import = if is_async {
-                            "use futures::{StreamExt, TryStreamExt};use futures; use profusion_async::GenericClient; use salvo::oapi::ToSchema;"
+                            "use futures::{StreamExt, TryStreamExt};use futures; use profusion_async::GenericClient; use salvo::oapi::ToSchema; use mlua::{ToLuaTable, FromLuaTable};"
                         } else {
                             "use postgres::{fallible_iterator::FallibleIterator,GenericClient};"
                         };
