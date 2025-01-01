@@ -504,23 +504,40 @@ fn gen_query_fn<W: Write>(w: &mut W, module: &PreparedModule, query: &PreparedQu
     };
 
     let struct_name = ident.type_ident();
-    let (param, param_field, order) = match param {
-        Some((idx, order)) => {
-            let it = module.params.get_index(*idx).unwrap().1;
-            (Some(it), it.fields.as_slice(), order.as_slice())
+    let (param, param_field, column_names) = match param {
+        Some((param_name, column_names)) => {
+            let it = module.params
+                .iter()
+                .find(|(k, _)| k.value == *param_name)
+                .map(|(_, v)| v)
+                .unwrap();
+            (Some(it), it.fields.as_slice(), column_names.as_slice())
         }
         None => (None, [].as_slice(), [].as_slice()),
     };
     let traits = &mut Vec::new();
-    let params_ty: Vec<_> = order
+    let params_ty: Vec<_> = column_names
         .iter()
-        .map(|idx| param_field[*idx].param_ergo_ty(traits, ctx))
+        .map(|name| param_field.iter().find(|f| &f.ident.db == name).unwrap().param_ergo_ty(traits, ctx))
         .collect();
-    let params_name = order.iter().map(|idx| &param_field[*idx].ident.rs);
+
+    let params_name = column_names.iter().map(|name| {
+        &param_field
+            .iter()
+            .find(|f| &f.ident.db == name)
+            .unwrap()
+            .ident.rs
+    });
+    
     let traits_idx = (1..=traits.len()).map(idx_char);
     let lazy_impl = |w: &mut W| {
-        if let Some((idx, index)) = row {
-            let item = module.rows.get_index(*idx).unwrap().1;
+        if let Some((row_name, _column_names)) = row {
+            let item = module.rows
+                .iter()
+                .find(|(k, _)| k.value == *row_name)
+                .map(|(_, v)| v)
+                .unwrap();
+            
             let PreparedItem {
                 name: row_name,
                 fields,
@@ -541,9 +558,10 @@ fn gen_query_fn<W: Write>(w: &mut W, module: &PreparedModule, query: &PreparedQu
                         let path = item.path(ctx);
                         let post = if *is_copy { "" } else { "Borrowed" };
                         let fields_name = fields.iter().map(|p| &p.ident.rs);
-                        let fields_idx = (0..fields.len()).map(|i| index[i]);
+                        let field_db_names = fields.iter().map(|p| &p.ident.db);
+                        // let fields_idx = (0..fields.len()).map(|i| index[i]);
                         code!(w => $path$post {
-                            $($fields_name: row.get($fields_idx),)
+                            $($fields_name: row.get("$field_db_names"),)
                         })
                     }),
                     code!(<$path>::from(it)),
@@ -569,8 +587,8 @@ fn gen_query_fn<W: Write>(w: &mut W, module: &PreparedModule, query: &PreparedQu
             );
         } else {
             // Execute fn
-            let params_wrap = order.iter().map(|idx| {
-                let p = &param_field[*idx];
+            let params_wrap = column_names.iter().map(|name| {
+                let p = param_field.iter().find(|f| &f.ident.db == name).unwrap();
                 p.ty.sql_wrapped(&p.ident.rs, ctx)
             });
             code!(w =>
@@ -605,14 +623,21 @@ fn gen_query_fn<W: Write>(w: &mut W, module: &PreparedModule, query: &PreparedQu
             } else {
                 "'a,"
             };
-            if let Some((idx, _)) = row {
-                let prepared_row = &module.rows.get_index(*idx).unwrap().1;
+            if let Some((row_name, _)) = row {
+                // let prepared_row = &module.rows.get_index(*idx).unwrap().1;
+                let prepared_row = module.rows
+                    .iter()
+                    .find(|(k, _)| k.value == *row_name)
+                    .map(|(_, v)| v)
+                    .unwrap();
+
+                
                 let query_row_struct = if prepared_row.is_named {
                     prepared_row.path(ctx)
                 } else {
                     prepared_row.fields[0].own_struct(ctx)
                 };
-                let name = &module.rows.get_index(*idx).unwrap().1.name;
+                let name = &prepared_row.name;
                 let nb_params = param_field.len();
                 code!(w =>
                     impl <'a, C: GenericClient,$($traits_idx: $traits,)> $client::Params<'a, $param_path<$lifetime $($traits_idx,)>, ${name}Query<'a, C, $query_row_struct, $nb_params>, C> for ${struct_name}Stmt {

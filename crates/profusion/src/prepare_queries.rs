@@ -22,8 +22,8 @@ use self::error::Error;
 #[derive(Debug, Clone)]
 pub(crate) struct PreparedQuery {
     pub(crate) ident: Ident,
-    pub(crate) param: Option<(usize, Vec<usize>)>,
-    pub(crate) row: Option<(usize, Vec<usize>)>,
+    pub(crate) param: Option<(String, Vec<String>)>, // Store column names instead of indices
+    pub(crate) row: Option<(String, Vec<String>)>,
     pub(crate) sql: String,
 }
 
@@ -157,24 +157,24 @@ impl PreparedModule {
         name: Span<String>,
         fields: Vec<PreparedField>,
         is_implicit: bool,
-    ) -> Result<(usize, Vec<usize>), Error> {
+    ) -> Result<(String, Vec<String>), Error> {
         assert!(!fields.is_empty());
         match map.entry(name.clone()) {
             Entry::Occupied(o) => {
                 let prev = &o.get();
                 // If the row doesn't contain the same fields as a previously
                 // registered row with the same name...
-                let indexes: Vec<_> = if prev.is_named {
+                let field_names: Vec<_> = if prev.is_named {
                     validation::named_struct_field(info, &prev.name, &prev.fields, &name, &fields)?;
                     prev.fields
                         .iter()
-                        .map(|f| fields.iter().position(|it| it == f).unwrap())
+                        .map(|f| f.ident.db.clone() )
                         .collect()
                 } else {
-                    vec![0]
+                    vec![fields[0].ident.db.clone()]
                 };
 
-                Ok((o.index(), indexes))
+                Ok((o.get().name.value.clone(), field_names))
             }
             Entry::Vacant(v) => {
                 v.insert(PreparedItem::new(name.clone(), fields.clone(), is_implicit));
@@ -188,7 +188,7 @@ impl PreparedModule {
         name: Span<String>,
         fields: Vec<PreparedField>,
         is_implicit: bool,
-    ) -> Result<(usize, Vec<usize>), Error> {
+    ) -> Result<(String, Vec<String>), Error> {
         let fuck = if fields.len() == 1 && is_implicit {
             name.map(|_| fields[0].unwrapped_name())
         } else {
@@ -202,24 +202,24 @@ impl PreparedModule {
         name: Span<String>,
         fields: Vec<PreparedField>,
         is_implicit: bool,
-    ) -> Result<(usize, Vec<usize>), Error> {
+    ) -> Result<(String, Vec<String>), Error> {
         Self::add(&self.info, &mut self.params, name, fields, is_implicit)
     }
 
     fn add_query(
         &mut self,
         name: Span<String>,
-        param_idx: Option<(usize, Vec<usize>)>,
-        row_idx: Option<(usize, Vec<usize>)>,
+        param: Option<(String, Vec<String>)>,
+        row: Option<(String, Vec<String>)>,
         sql: String,
     ) {
         self.queries.insert(
             name.clone(),
             PreparedQuery {
                 ident: Ident::new(name.value),
-                row: row_idx,
+                row,
                 sql,
-                param: param_idx,
+                param
             },
         );
     }
