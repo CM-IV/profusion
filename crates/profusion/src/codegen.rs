@@ -345,13 +345,13 @@ fn gen_row_structs(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
         // Generate row struct
         let fields_name = fields.iter().map(|p| &p.ident.rs);
         let fields_ty = fields.iter().map(|p| p.own_struct(ctx));
-        let fields_attr = fields.iter().map(|p| {
-            if p.ident.rs.contains("created_at") || p.ident.rs.contains("updated_at") || p.ident.rs.contains("delivery_date") {
-                String::from("#[serde(with = \"time::serde::rfc3339\")]")
-            } else {
-                String::from("")
-            }
-        });
+        // let fields_attr = fields.iter().map(|p| {
+        //     if p.ident.rs.contains("created_at") || p.ident.rs.contains("updated_at") || p.ident.rs.contains("delivery_date") {
+        //         String::from("#[serde(with = \"time::serde::rfc3339\")]")
+        //     } else {
+        //         String::from("")
+        //     }
+        // });
 
         let copy = if *is_copy { "Copy" } else { "" };
         let ser_str = if ctx.gen_derive {
@@ -362,8 +362,9 @@ fn gen_row_structs(w: &mut impl Write, row: &PreparedItem, ctx: &GenCtx) {
         code!(w =>
             #[derive($ser_str Debug, Clone, PartialEq, ToSchema, ToLuaTable, FromLuaTable, $copy)]
             pub struct $name {
-                $($fields_attr
-                pub $fields_name : $fields_ty,)
+                $(pub $fields_name : $fields_ty,)
+                // $($fields_attr
+                // pub $fields_name : $fields_ty,)
             }
         );
 
